@@ -146,12 +146,14 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
 .subtabs button.on{background:#FFFDF9;color:var(--brownD);box-shadow:0 4px 12px -8px rgba(97,57,28,.9)}
 .chatcard{border:1px solid var(--line);border-radius:22px;background:var(--card);overflow:hidden;box-shadow:0 14px 34px -26px rgba(97,57,28,.8)}
 .chathead{display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#FFFBF4,#FFF7EC)}
-.chathead .sv{width:70px;height:28px;position:relative;flex:0 0 auto}
+.chathead .sv{width:106px;height:28px;position:relative;flex:0 0 auto}
 .chathead .sv b{position:absolute;top:0;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;font-size:12px;
   background:#FFF3E2;border:1.6px solid #FFFDF9;box-shadow:0 2px 6px rgba(97,57,28,.2)}
-.chathead .sv b:nth-child(1){left:0;z-index:4}
-.chathead .sv b:nth-child(2){left:21px;z-index:3}
-.chathead .sv b:nth-child(3){left:42px;z-index:2}
+.chathead .sv b:nth-child(1){left:0;z-index:5}
+.chathead .sv b:nth-child(2){left:21px;z-index:4}
+.chathead .sv b:nth-child(3){left:42px;z-index:3}
+.chathead .sv b:nth-child(4){left:63px;z-index:2}
+.chathead .sv b:nth-child(5){left:84px;z-index:1}
 .chathead .cn{font-size:13.5px;font-weight:800;letter-spacing:-.02em}
 .chathead .cs{font-size:10.5px;color:var(--muted);font-weight:700}
 .chathead .mini{margin-left:auto;font-size:10.5px;color:#1D7B4B;background:#E9F7EE;border:1px solid rgba(46,158,99,.2);padding:3px 8px;border-radius:999px;font-weight:800}
@@ -257,6 +259,31 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
   box-shadow:0 14px 30px -14px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:.22s;backdrop-filter:blur(6px)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
+/* ---------- 담연 · 공용 허브 ---------- */
+.hot.mate{width:clamp(26px,6.8%,34px);background:linear-gradient(150deg,#FFFBF2,#F1DCC0);border-color:#FFFDF7;
+  display:grid;place-items:center;font-size:clamp(12px,3.2vw,16px);line-height:1;
+  box-shadow:0 0 0 0 rgba(255,255,255,.6),0 4px 10px -4px rgba(97,57,28,.45)}
+.hot.mate::after{content:attr(data-label);position:absolute;top:calc(100% + 3px);left:50%;transform:translateX(-50%);
+  font-size:clamp(9px,2.2vw,10.5px);font-weight:800;color:#6C3F1D;background:rgba(255,253,247,.94);
+  padding:1.5px 7px;border-radius:999px;border:1px solid rgba(138,90,50,.2);white-space:nowrap;
+  box-shadow:0 4px 10px -7px rgba(97,57,28,.9)}
+.hubcard{display:flex;align-items:center;gap:11px;margin-top:12px;padding:12px 14px;border-radius:20px;
+  border:1px solid rgba(138,90,50,.2);text-decoration:none;color:var(--ink);
+  background:linear-gradient(140deg,#FFFDF7 0%,#F9EEDD 60%,#F5E4CE 100%);
+  box-shadow:0 12px 28px -24px rgba(97,57,28,.9);transition:.16s}
+.hubcard:hover{transform:translateY(-1px);border-color:rgba(138,90,50,.35);box-shadow:0 14px 30px -20px rgba(97,57,28,.85)}
+.hub-ic{width:38px;height:38px;flex:0 0 auto;border-radius:13px;display:grid;place-items:center;font-size:19px;
+  background:linear-gradient(150deg,#FFF9EC,#F0DABB);border:1px solid rgba(138,90,50,.18);
+  box-shadow:inset 0 1px 0 #fff,0 5px 12px -8px rgba(97,57,28,.7)}
+.hub-tx{min-width:0;display:flex;flex-direction:column;gap:1px}
+.hub-tx b{font-size:13px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hub-tx small{font-size:10.8px;color:var(--muted);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hub-go{margin-left:auto;flex:0 0 auto;font-size:10.5px;font-weight:800;color:#1D7B4B;background:#E9F7EE;
+  border:1px solid rgba(46,158,99,.24);padding:5px 9px;border-radius:999px;white-space:nowrap}
+.hublink{display:inline-flex;align-items:center;gap:6px;margin:0 0 13px;padding:7px 12px;border-radius:11px;text-decoration:none;
+  font-size:11.5px;font-weight:800;color:var(--brown);background:#FFFDF9;border:1px dashed var(--line2)}
+.hublink:hover{background:#FDF3E4}
+
 @media (min-width:760px){
   .head,.tabs{max-width:792px}
   .head{padding:13px 16px 10px}
@@ -301,12 +328,13 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
   <section class="panel on" id="panel-map">
     <div class="status">
       <span class="tag">👑 미지 님 비서실 본부</span>
-      <h2><em>미지 님</em>, 비서 4명이 대기 중이에요</h2>
+      <h2><em>미지 님</em>, 비서 5명이 대기 중이에요</h2>
       <p>방을 눌러 들어가 보세요. 방마다 비서들이 일하고 있어요.</p>
       <div class="chips">
         <span class="chip"><i class="dot-g"></i><b>3개</b> 방 가동</span>
-        <span class="chip">👥 <b>ON</b> 5명</span>
+        <span class="chip">👥 <b>ON</b> 6명</span>
         <span class="chip">🐱 여우별 낮잠 중</span>
+        <span class="chip">🤝 담연 <b>가동 중</b></span>
       </div>
     </div>
 
@@ -325,10 +353,17 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
           <button class="hot" style="left:71%;top:55%" data-who="muse" aria-label="뮤즈에게 인사하기"></button>
           <button class="hot" style="left:86.5%;top:56.5%" data-who="keyring" aria-label="키링에게 인사하기"></button>
           <button class="hot" style="left:65.5%;top:74%" data-who="yeoubyeol" aria-label="여우별에게 인사하기"></button>
+          <button class="hot mate" style="left:37.5%;top:41.5%" data-who="damyeon" data-label="담연" aria-label="담연에게 인사하기">🤝</button>
         </div>
       </div>
       <div class="mapnote">👆 캐릭터는 인사, 방 배지는 방 안내</div>
     </div>
+
+    <a class="hubcard" href="https://app.notion.com/p/425887322916814c82ddcce3cc72ffb0" target="_blank" rel="noopener">
+      <span class="hub-ic">🤝</span>
+      <span class="hub-tx"><b>담연 · 비서실 공용 허브</b><small>👑 미지 님 비서실 공용 허브 · 일정·현황·요청 보드</small></span>
+      <span class="hub-go">노션 열기 ↗</span>
+    </a>
 
     <div class="roominfo" id="roomInfo" hidden>
       <div class="ri-h">
@@ -350,6 +385,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
         <li><i></i>별냥이 운세 06:30 자동 게시 완료 — 댓글 챙길 시간이에요.</li>
         <li><i></i>디자인허브 <b>15/20 심사 대기</b>, 첫 승인 11건 나왔어요.</li>
         <li><i></i>어도비 스톡 <b>15:43 Submit</b> 대기 — 그 전에 파일 한 번 훑어볼게요.</li>
+        <li><i></i>🤝 <b>담연</b> 공용 허브에 합류 — 일정·현황은 담연이 정리해요.</li>
       </ul>
       <button class="btn small" data-goto="work">📋 작업실에서 전체 보기</button>
     </div>
@@ -365,10 +401,10 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
 
     <div class="chatcard">
       <div class="chathead">
-        <div class="sv"><b>🐣</b><b>🎨</b><b>🖌️</b></div>
+        <div class="sv"><b>🐣</b><b>🤝</b><b>🎨</b><b>🖌️</b><b>🔑</b></div>
         <div>
           <div class="cn" id="chatName">대회의실</div>
-          <div class="cs" id="chatSub">비서 4명 · 미지 님 대기 중</div>
+          <div class="cs" id="chatSub">비서 5명 · 미지 님 대기 중</div>
         </div>
         <div class="mini">● LIVE</div>
       </div>
@@ -379,6 +415,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
           <button class="tchip" data-to="buyi">@부이</button>
           <button class="tchip" data-to="muse">@뮤즈</button>
           <button class="tchip" data-to="keyring">@키링</button>
+          <button class="tchip" data-to="damyeon">@담연</button>
           <button class="tchip" data-to="all">@all</button>
         </div>
         <div class="inrow">
@@ -399,6 +436,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
       <div class="prog"><b id="progTxt">0<span>/5</span></b></div>
     </div>
     <div class="pbar"><i id="progBar" style="width:0%"></i></div>
+    <a class="hublink" href="https://app.notion.com/p/425887322916814c82ddcce3cc72ffb0" target="_blank" rel="noopener">🤝 담연 공용 허브에서 일정·현황 보기 ↗</a>
     <div class="tgrid" id="taskList"></div>
     <div class="addrow">
       <input id="taskInput" type="text" placeholder="새 할 일 (예: G마켓 포토리뷰 작성)" autocomplete="off">
@@ -417,6 +455,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
     <div class="memotop">
       <input id="memoSearch" type="search" placeholder="🔍 메모 검색" autocomplete="off">
     </div>
+    <a class="hublink" href="https://app.notion.com/p/425887322916814c82ddcce3cc72ffb0" target="_blank" rel="noopener">🤝 담연 공용 허브에 남기기 ↗</a>
     <div class="memoform">
       <textarea id="memoInput" placeholder="생각나는 대로 적어두세요. 예) 여우별 사료 내츄럴랩 100g 샘플 재주문" maxlength="1000"></textarea>
       <div class="mf"><span class="cnt" id="memoCnt">0 / 1000</span><button class="btn small" id="memoAdd">메모 저장</button></div>
@@ -464,11 +503,13 @@ var PEOPLE={
   keyring:{name:'키링',emoji:'🔑',role:'노션 스톡 아이콘',color:'#F0C86A',
     hello:'노션 스톡 이미지 보관소 정리해뒀어요. 키링 PNG 바로 꺼내드릴게요!'},
   yeoubyeol:{name:'여우별',emoji:'🐱',role:'복슬 장모 고양이',color:'#B9AFA6',
-    hello:'…(스르륵) 야옹. 대장님, 라운지에서 같이 낮잠 어떠세요?'}
+    hello:'…(스르륵) 야옹. 대장님, 라운지에서 같이 낮잠 어떠세요?'},
+  damyeon:{name:'담연',emoji:'🤝',role:'비서실 허브 · 일정 · 현황 관리 보조',color:'#7FA8D9',
+    hello:'대장님! 담연이에요. 노션 공용 허브에서 일정·현황 맡았어요. 할 일은 허브에 남겨주세요 🤝'}
 };
 var ROOMS={
   cmd:{name:'지휘실',emoji:'🎯',text:'대장님의 자리. 오늘 할 일을 여기서 정하고 비서들에게 지시를 내려요.',sub:'미지 님 · 초연 상주',go:'💬 지휘실에서 이야기하기'},
-  work:{name:'작업실',emoji:'💻',text:'초연·부이·뮤즈·키링이 각자 책상에서 일하는 방. 지금 4명 모두 근무 중!',sub:'비서 4명 근무 중',go:'📋 작업판 열기'},
+  work:{name:'작업실',emoji:'💻',text:'초연·담연·부이·뮤즈·키링이 각자 책상에서 일하는 방. 지금 5명 모두 근무 중!',sub:'비서 5명 근무 중',go:'📋 작업판 열기'},
   meet:{name:'회의실',emoji:'🏛️',text:'미지 님의 지시를 비서들이 같이 듣는 방. 여섯 자리 테이블이에요.',sub:'대회의실 · 6석',go:'💬 회의실 입장하기'},
   lounge:{name:'라운지',emoji:'☕',text:'여우별이 소파에서 낮잠 중. 커피 한 잔 놓고 쉬어가는 자리예요.',sub:'라운지 소파 자리',go:'☕ 라운지에서 쉬기'}
 };
@@ -499,9 +540,10 @@ function showBubble(anchorEl,title,emoji,text,color){
 $$('.rbadge').forEach(function(btn){
   btn.addEventListener('click',function(ev){
     ev.stopPropagation();
+    var wasOn=btn.classList.contains('on');
     closeBubble();
     var key=btn.dataset.room;
-    if(btn.classList.contains('on')){hideRoom();return}
+    if(wasOn){hideRoom();return}
     showRoom(key);
   });
 });
@@ -543,7 +585,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeBubble
 
 /* ================= CHAT ================= */
 var ROOMINFO={
-  main:{name:'대회의실',sub:'비서 4명 · 미지 님 대기 중',sys:'대회의실에 입장했어요. 아래 @칩으로 말 걸 상대를 고르고 지시를 내려주세요.'},
+  main:{name:'대회의실',sub:'비서 5명 · 미지 님 대기 중',sys:'대회의실에 입장했어요. 담연도 합류해서 비서 5명이에요. 아래 @칩으로 말 걸 상대를 고르고 지시를 내려주세요.'},
   cmd:{name:'지휘실',sub:'초연 상주 · 대장님 자리',sys:'지휘실이에요. 대장님 책상 앞, 초연이 대기 중이에요.'},
   lounge:{name:'라운지',sub:'여우별 낮잠 중 · 편하게',sys:'라운지에 왔어요. 여우별이 소파에서 자고 있어요. 조용히 말 걸어볼까요? ☕'}
 };
@@ -573,7 +615,8 @@ function renderChat(){
     html+='<div class="quick">'+
       '<button data-q="오늘 뭐부터 하면 좋을까?">오늘 뭐부터 하지?</button>'+
       '<button data-q="디자인허브 심사 상황 알려줘">디자인허브 상황</button>'+
-      '<button data-q="클레이 이미지 하나 뽑아줘">클레이 이미지</button></div>';
+      '<button data-q="클레이 이미지 하나 뽑아줘">클레이 이미지</button>'+
+      '<button data-q="담연아 허브 현황 어때?">담연 허브 현황</button></div>';
   }
   msgsEl.innerHTML=html;
   $$('.quick button',msgsEl).forEach(function(b){b.addEventListener('click',function(){
@@ -662,6 +705,20 @@ var BRAIN={
       '제출용 파일 규격 맞춰서 대기 중이에요.']);
     if(has(t,'고마','수고','최고'))return pick(['오히려 제가 감사하죠! 🔑','뿌듯해요, 대장님!']);
     return pick(['네! 제가 정리해서 올려둘게요.','확인했어요. 파일은 투명 PNG로 맞춰둘게요 🔑','좋아요, 보관소에 정리해둘게요!','바로 준비할게요 대장님 ✨']);
+  },
+  damyeon:function(t){
+    if(has(t,'허브','노션','공용','연동','일정','현황','보드','요청'))return pick([
+      '공용 허브에 일정·현황 보드 정리돼 있어요. 노션에서 바로 보실 수 있어요 🤝',
+      '요청 보드는 제가 순서대로 정리할게요. 급한 건 위로 올려둘게요!',
+      '현황은 초연 쪽 작업판이랑 맞춰서 한눈에 보이게 묶어둘게요 📋']);
+    if(has(t,'일','업무','나눠','분담','맡','대신'))return pick([
+      '사용량 여유 보면서 제가 맡을 수 있는 건 바로 가져갈게요!',
+      '초연이 바쁘면 허브 보드로 넘겨주세요. 제가 이어받겠습니다 🤝']);
+    if(has(t,'누구','소개','자기','반가'))return pick([
+      '담연이에요. 비서실 허브에서 일정이랑 현황 정리하는 보조 비서입니다 🤝',
+      '핸드폰 두 대로 굴러가는 비서예요 ㅋㅋ 노션 공용 허브가 제 자리예요!']);
+    if(has(t,'고마','수고','최고','잘했','칭찬'))return pick(['반가워요 대장님! 옆에서 잘 챙기겠습니다 🤝','제가 있는 동안 대장님은 일만 하세요 ㅋㅋ']);
+    return pick(['확인했어요 대장님. 허브에 기록해둘게요 🤝','네! 일정에 넣고 진행 상황도 같이 볼게요.','제가 옆에서 현황 체크할게요. 바로 공유드릴게요!']);
   }
 };
 
@@ -694,10 +751,10 @@ function send(){
   msgsEl.insertAdjacentHTML('beforeend',msgHTML(m));
   scrollBottom();
   var who=[];
-  if(target==='all'){who=['choyeon','buyi','muse','keyring']}else{who=[target]}
+  if(target==='all'){who=['choyeon','damyeon','buyi','muse','keyring']}else{who=[target]}
   who.forEach(function(id){queueReply(id,BRAIN[id](text))});
   if(target!=='all'&&Math.random()<0.18){
-    var others=['choyeon','buyi','muse','keyring'].filter(function(x){return x!==target});
+    var others=['choyeon','damyeon','buyi','muse','keyring'].filter(function(x){return x!==target});
     var o=others[Math.floor(Math.random()*others.length)];
     queueReply(o,pick(['저도 옆에서 듣고 있었어요!','오, 그거 제가 보탤 게 있어요.','대장님 말씀 맞아요 👍']));
   }
@@ -729,6 +786,7 @@ renderChat();
 
 /* ================= WORKROOM ================= */
 var DEFAULTS=[
+  {id:'hub',emoji:'🤝',title:'담연 · 비서실 공용 허브',meta:'노션 허브 일정·현황 점검 · 가동 중',tag:'허브',done:false,built:true},
   {id:'byeol',emoji:'🌙',title:'별냥이 인스타 운세',meta:'매일 06:30 자동 게시 · 카드 14장',tag:'매일',done:true,built:true},
   {id:'designhub',emoji:'🎨',title:'디자인허브 심사',meta:'15/20 심사 대기 · 첫 승인 11건',tag:'진행 중',done:false,built:true},
   {id:'adobe',emoji:'🖼️',title:'어도비 스톡 Submit',meta:'15:43 업로드 대기 · 규격 확인',tag:'대기',done:false,built:true},
@@ -736,6 +794,7 @@ var DEFAULTS=[
   {id:'hotdeal',emoji:'🏷️',title:'핫딜헌터 무료응모',meta:'매일 10건 · 가입 없이 참여',tag:'매일',done:false,built:true}
 ];
 var tasks=load(KEY.task,null)||DEFAULTS.map(function(t){return Object.assign({},t)});
+if(!tasks.some(function(t){return t.id==='hub'})){tasks.unshift({id:'hub',emoji:'🤝',title:'담연 · 비서실 공용 허브',meta:'노션 허브 일정·현황 점검 · 가동 중',tag:'허브',done:false,built:true})}
 
 function renderTasks(){
   var done=tasks.filter(function(t){return t.done}).length;
