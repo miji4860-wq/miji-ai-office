@@ -338,6 +338,16 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
 @keyframes ambIn{from{opacity:0;transform:translateX(-50%) translateY(3px) scale(.9)}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
 .stage .chr.talk .nm{background:linear-gradient(160deg,#8E5A31,#6C3F1D);color:#FFF7ED;border-color:transparent}
 
+/* ---------- 회의실 의자에 앉은 자세 ---------- */
+.stage .chr.seated img{transform:scale(.88,.8) translateX(var(--tuck,0))}
+.stage .chr.seated .shaw{opacity:0}
+.stage .chr.seated .amb{left:calc(50% + var(--ambx,0%));bottom:calc(80% + 2px)}
+.stage .chr.seated .nm{font-size:calc(var(--nfs) * .94)}
+@media (max-width:520px){.stage .chr.seated .nm b{display:none}
+  .stage .chr.seated .nm{font-size:calc(var(--nfs) * .78)}
+  .stage .chr.seated .amb{font-size:calc(var(--nfs) * .82)}
+  .stage .rbadge[data-room="meet"]{top:56.6%!important;font-size:9px;padding:3px 7px;gap:3px}}
+
 .walkbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin-top:11px}
 .wbtn{display:inline-flex;align-items:center;gap:5px;padding:8px 13px;border-radius:999px;font-size:12px;font-weight:800;color:var(--brownD);
   background:#FFFDF9;border:1px solid var(--line2);box-shadow:0 7px 16px -12px rgba(97,57,28,.9);transition:transform .15s,background .15s}
@@ -406,7 +416,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
           <!-- room badges -->
           <button class="rbadge" style="left:27%;top:30%" data-room="cmd">🎯 지휘실</button>
           <button class="rbadge" style="left:74%;top:31.5%" data-room="work">💻 작업실</button>
-          <button class="rbadge" style="left:22%;top:61%" data-room="meet">🏛️ 회의실</button>
+          <button class="rbadge" style="left:22.4%;top:57.2%" data-room="meet">🏛️ 회의실</button>
           <button class="rbadge" style="left:73%;top:77%" data-room="lounge">☕ 라운지</button>
           <div id="chrLayer"></div>
           <!-- 여우별 (소파 위 고양이) -->
@@ -678,26 +688,33 @@ var NODES={
   /* 라운지 */
   pl:{x:50,y:80.6,r:'lounge'}, L3:{x:49.6,y:83.8,r:'lounge'}, L2:{x:48.4,y:88,r:'lounge'},
   L1:{x:57,y:91,r:'lounge'}, Lb:{x:65.5,y:93.4,r:'lounge'},
-  /* 회의실 */
-  m0:{x:41,y:55.5,r:'meet'}, m1:{x:37.5,y:60,r:'meet'}, m2:{x:35.6,y:64.6,r:'meet'},
-  m3:{x:35.4,y:69.6,r:'meet'}, mx:{x:37.2,y:73.6,r:'meet'}, m8:{x:35,y:75.8,r:'meet'},
-  m7:{x:29.6,y:80.6,r:'meet'}, m6:{x:24,y:75.4,r:'meet'}, m5:{x:18.4,y:80.6,r:'meet'},
-  m4:{x:12.8,y:75.8,r:'meet'}
+  /* 회의실 — 오른쪽 문 → 테이블 둘레 (의자 바깥쪽으로 도는 길) */
+  m0:{x:41,y:55.5,r:'meet'}, m1:{x:37.8,y:58.6,r:'meet'}, mdoor:{x:34.4,y:60.6,r:'meet'},
+  mq1:{x:33.4,y:65.4,r:'meet'}, mq2:{x:32.4,y:70.6,r:'meet'}, mq3:{x:27.4,y:74.6,r:'meet'},
+  mq4:{x:22,y:75.6,r:'meet'}, mq5:{x:16.8,y:74.4,r:'meet'}, mq6:{x:12.6,y:69.2,r:'meet'},
+  mq7:{x:11.6,y:64.2,r:'meet'},
+  /* 회의실 의자 5석 — 다섯 명이 실제로 앉는 자리 */
+  msC:{x:13.4,y:61.6,r:'meet'}, msE:{x:16.1,y:71.2,r:'meet'}, msF:{x:22.0,y:73.8,r:'meet'},
+  msD:{x:31.2,y:61.0,r:'meet'}, msG:{x:30.8,y:70.4,r:'meet'}
 };
 NODES.w5.pair='pl'; NODES.pl.pair='w5';
 var EDGES=[['cmd1','cmd2'],['cmd2','cmd3'],['cmd3','cmd4'],['cmd4','door'],['door','w1'],
   ['w1','w2'],['w2','w3'],['w3','w4'],['w4','w5'],['w5','w6'],
   ['w6','w7'],['w7','w8'],['w8','w9'],['w9','w10'],['w10','w11'],
   ['w5','pl'],['pl','L3'],['L3','L2'],['L2','L1'],['L1','Lb'],
-  ['w1','m0'],['m0','m1'],['m1','m2'],['m2','m3'],['m3','mx'],['mx','m8'],
-  ['m8','m7'],['m7','m6'],['m6','m5'],['m5','m4']];
+  ['w1','m0'],['m0','m1'],['m1','mdoor'],['mdoor','mq1'],['mq1','mq2'],['mq2','mq3'],
+  ['mq3','mq4'],['mq4','mq5'],['mq5','mq6'],['mq6','mq7'],
+  ['mq7','msC'],['mq6','msC'],['mq6','msE'],['mq5','msE'],['mq5','msF'],['mq4','msF'],
+  ['mq3','msG'],['mq2','msG'],['mq1','msD'],['mdoor','msD']];
 var ADJ={};
 EDGES.forEach(function(e){
   (ADJ[e[0]]=ADJ[e[0]]||[]).push(e[1]);
   (ADJ[e[1]]=ADJ[e[1]]||[]).push(e[0]);
 });
 var ALLNODES=Object.keys(NODES).filter(function(k){return k.indexOf('m')!==0});
-var MEETNODES=['m0','m1','m2','m3','m4','m5','m6','m7','m8'];
+/* 회의 중 말풍선을 앉은 자리마다 살짝 옆으로 비켜 놓아 이름표를 가리지 않게 */
+var SEAT_AMB={choyeon:0,damyeon:88,buyi:34,keyring:0,muse:-130};
+var ambBusy=false;
 
 function pathTo(from,to){
   if(from===to)return [];
@@ -722,15 +739,15 @@ var AMB={
   buyi:['클레이 렌더 중 🎨','메일 정리 중 📮','카드 만드는 중 🖼️','별냥이 배너 🐾'],
   keyring:['스톡 정리 중 🔑','PNG 누끼 중 ✂️','보관소 정리 📦'],
   muse:['일러스트 중 ✨','톤 맞추는 중 🖌️','2048px 작업 중 🎨'],
-  _meet:['회의 중 🗣️','같이 듣는 중 👂','메모 중 📝']
+  _meet:['회의 중 🗣️','발언 중 💬','같이 듣는 중 👂','메모 중 📝']
 };
 var CH={},OWN={};
 var CHARS=[
-  {id:'choyeon',sx:32,sy:50.4,home:'cmd3',zone:['cmd1','cmd2','cmd3','cmd4','door','w1','w2'],seat:'m5',speed:6.4},
-  {id:'damyeon',sx:50,sy:59,home:'w3',zone:['w1','w2','w3','w4','w5','door','cmd4'],seat:'m4',speed:6.1},
-  {id:'buyi',sx:53.4,sy:60.2,home:'w5',zone:['w4','w5','w6','w7','w8','w9'],seat:'m6',speed:6.7},
-  {id:'muse',sx:74,sy:47.6,home:'w9',zone:['w8','w9','w10','w11','w7'],seat:'m7',speed:6.3},
-  {id:'keyring',sx:65.5,sy:93.4,home:'Lb',zone:['L1','L2','L3','Lb'],seat:'m8',speed:6.5}
+  {id:'choyeon',sx:32,sy:50.4,home:'cmd3',zone:['cmd1','cmd2','cmd3','cmd4','door','w1','w2'],seat:'msC',speed:6.4},
+  {id:'damyeon',sx:50,sy:59,home:'w3',zone:['w1','w2','w3','w4','w5','door','cmd4'],seat:'msE',speed:6.1},
+  {id:'buyi',sx:53.4,sy:60.2,home:'w5',zone:['w4','w5','w6','w7','w8','w9'],seat:'msF',speed:6.7},
+  {id:'muse',sx:74,sy:47.6,home:'w9',zone:['w8','w9','w10','w11','w7'],seat:'msG',speed:6.3},
+  {id:'keyring',sx:65.5,sy:93.4,home:'Lb',zone:['L1','L2','L3','Lb'],seat:'msD',speed:6.5}
 ];
 
 var layer=document.getElementById('chrLayer');
@@ -786,11 +803,27 @@ function goTo(c,to,fast){
   c.speed=fast?c.base*1.55:c.base;
   claim(c,to);
   if(c.path.length)c.state='walk';
+  else if(c.mode==='meet')sitDown(c);   /* 이미 의자 앞이면 바로 앉기 */
+}
+/* 회의실 의자에 앉기 — 걷는 동작 멈추고 테이블 쪽으로 살짝 기대 앉은 자세 */
+function sitDown(c){
+  c.state='meet'; c.wait=99;
+  c.el.classList.remove('walk','left');
+  c.el.classList.add('stand','seated');
+  var tuck=Math.max(-10,Math.min(10,(22-c.x)*1.6));
+  c.el.style.setProperty('--tuck',tuck.toFixed(1)+'%');
+  c.el.style.setProperty('--ambx',(SEAT_AMB[c.id]||0)+'%');
+  c.ambT=1.4+Math.random()*2.4;
+}
+function standUp(c){
+  c.el.classList.remove('seated');
+  c.el.style.setProperty('--tuck','0%');
 }
 function arrive(c){
-  c.state=(c.mode==='meet')?'meet':'stand';
-  c.wait=(c.mode==='meet')?99:(1.4+Math.random()*3.4);
-  if(c.mode==='meet'){c.el.classList.add('stand');c.el.classList.remove('walk')}
+  if(c.mode==='meet'){sitDown(c);return}
+  c.state='stand';
+  c.wait=1.4+Math.random()*3.4;
+  c.el.classList.remove('walk');c.el.classList.add('stand');
 }
 function owned(id,who){return OWN[id]!==undefined&&OWN[id]!==who}
 function claim(c,id){
@@ -837,7 +870,7 @@ function freeRoam(){
   $('#btnMeet').classList.remove('on'); $('#btnRoam').classList.add('on');
   $('#walkStat').textContent='🐾 자유 산책 중 — 다섯 명이 사무실을 아장아장 걷고 있어요';
   Object.keys(CH).forEach(function(k,i){
-    var c=CH[k]; c.mode='roam';
+    var c=CH[k]; c.mode='roam'; c.state='stand'; c.wait=.25; standUp(c);
     setTimeout(function(){goTo(c,c.home)},i*700);
   });
 }
@@ -888,6 +921,7 @@ function tick(ts){
         if(c.dir<0)c.el.classList.add('left');else c.el.classList.remove('left');
       }else{
         c.el.classList.remove('walk');c.el.classList.add('stand');
+        if(c.state==='meet'){c.el.classList.remove('left');if(!c.el.classList.contains('seated'))sitDown(c);}
         c.wait-=dt;
         if(c.wait<=0){
           if(c.mode==='meet'){c.wait=3+Math.random()*3;}
@@ -898,10 +932,11 @@ function tick(ts){
           if(c.ambT<=0){
             var box=c.box, old=box.querySelector('.amb'); if(old)old.remove();
             var list=(c.mode==='meet'?AMB._meet:AMB[c.id])||[];
-            if(list.length&&Math.random()<.85){
+            if(list.length&&Math.random()<.85&&!(c.mode==='meet'&&ambBusy)){
               var s=document.createElement('span'); s.className='amb'; s.textContent=list[Math.floor(Math.random()*list.length)];
+              if(c.mode==='meet')ambBusy=true;
               box.appendChild(s);
-              setTimeout(function(){s.remove()},2400);
+              setTimeout(function(){s.remove();ambBusy=false;},2400);
             }
             c.ambT=(c.mode==='meet'?4.5:7)+Math.random()*7;
           }
