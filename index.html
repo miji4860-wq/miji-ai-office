@@ -458,7 +458,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
       <a href="https://app.notion.com/p/425887322916814c82ddcce3cc72ffb0" target="_blank" rel="noopener"><span class="i">👑</span><span>공용 허브<small>일정·현황·요청 보드</small></span></a>
       <a href="https://app.notion.com/p/4258873229168175acd6d64e2fd15f71" target="_blank" rel="noopener"><span class="i">🎨</span><span>부이 작업 기록<small>클레이·카드·배너</small></span></a>
       <a href="https://app.notion.com/p/425887322916817aa514fc6242690121" target="_blank" rel="noopener"><span class="i">🔑</span><span>키링 작업 기록<small>스톡·누끼·업로드</small></span></a>
-      <a href="https://app.notion.com/p/42588732291681af9341cdf1495e438a" target="_blank" rel="noopener"><span class="i">✨</span><span>뮤즈 작업 기록<small>일러스트·해상도</small></span></a>
+      <a href="https://app.notion.com/p/42588732291681af9341cdf1495e438a" target="_blank" rel="noopener"><span class="i">✨</span><span>뮤즈 작업 기록<small>카드뉴스·운세 분석</small></span></a>
     </div>
 
     <div class="roominfo" id="roomInfo" hidden>
@@ -538,7 +538,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
       <a href="https://app.notion.com/p/425887322916814c82ddcce3cc72ffb0" target="_blank" rel="noopener"><span class="i">👑</span><span>공용 허브<small>일정·현황·요청 보드</small></span></a>
       <a href="https://app.notion.com/p/4258873229168175acd6d64e2fd15f71" target="_blank" rel="noopener"><span class="i">🎨</span><span>부이 작업 기록<small>클레이·카드·배너</small></span></a>
       <a href="https://app.notion.com/p/425887322916817aa514fc6242690121" target="_blank" rel="noopener"><span class="i">🔑</span><span>키링 작업 기록<small>스톡·누끼·업로드</small></span></a>
-      <a href="https://app.notion.com/p/42588732291681af9341cdf1495e438a" target="_blank" rel="noopener"><span class="i">✨</span><span>뮤즈 작업 기록<small>일러스트·해상도</small></span></a>
+      <a href="https://app.notion.com/p/42588732291681af9341cdf1495e438a" target="_blank" rel="noopener"><span class="i">✨</span><span>뮤즈 작업 기록<small>카드뉴스·운세 분석</small></span></a>
     </div>
     <div class="tgrid" id="taskList"></div>
     <div class="addrow">
@@ -601,8 +601,8 @@ var PEOPLE={
     hello:'대장님! 오늘 루틴 다 챙겨뒀어요. 뭐부터 시작할까요? ✨'},
   buyi:{name:'부이',emoji:'🎨',role:'별냥이 카드·배너 이미지 · 메일 정리 · Meta 답장 보조',color:'#8FC7C0',
     hello:'별냥이 카드랑 배너 이미지, 메일 정리, Meta 답장까지 제가 보고 있어요~ 말씀만 하세요!'},
-  muse:{name:'뮤즈',emoji:'✨',role:'고해상도 일러스트',color:'#C9A6D8',
-    hello:'고해상도 일러스트 준비됐어요. 톤이랑 분위기만 정해주시면 뽑아볼게요!'},
+  muse:{name:'뮤즈',emoji:'✨',role:'카드뉴스(@cardnews_4860) 제작 · 운세 성장 분석',color:'#C9A6D8',
+    hello:'카드뉴스랑 운세 계정 성장 분석은 제가 맡고 있어요! 오늘 소재부터 볼까요? 📰'},
   keyring:{name:'키링',emoji:'🔑',role:'노션 스톡 아이콘',color:'#F0C86A',
     hello:'노션 스톡 이미지 보관소 정리해뒀어요. 키링 PNG 바로 꺼내드릴게요!'},
   yeoubyeol:{name:'여우별',emoji:'🐱',role:'복슬 장모 고양이',color:'#B9AFA6',
@@ -744,7 +744,7 @@ var ALLNODES=Object.keys(NODES).filter(function(k){return k.indexOf('m')!==0&&!N
 /* 회의 중 말풍선을 앉은 자리마다 살짝 옆으로 비켜 놓아 이름표를 가리지 않게 */
 var SEAT_AMB={choyeon:0,damyeon:88,buyi:34,keyring:0,muse:-130};
 /* 💻 일하기 — 책상에서 하는 일 (이름표는 발밑, 이 말풍선은 머리 위라 서로 가리지 않음) */
-var WORK_AMB={choyeon:'일정 챙기는 중 📋',damyeon:'노션 정리 중 🤝',buyi:'클레이 작업 중 🎨',keyring:'스톡 검수 중 🔑',muse:'일러스트 작업 중 ✨'};
+var WORK_AMB={choyeon:'일정 챙기는 중 📋',damyeon:'노션 정리 중 🤝',buyi:'클레이 작업 중 🎨',keyring:'스톡 검수 중 🔑',muse:'카드뉴스 제작 중 📰'};
 /* 의자에 앉을 때 살짝 밀어 넣는 정도(가로, %) — 의자 좌판 가운데에 맞춤 */
 var WORK_TUCK={choyeon:2,damyeon:-2,buyi:1,keyring:-1,muse:-2};
 var ambBusy=false,wkRot=0;
@@ -771,7 +771,7 @@ var AMB={
   damyeon:['노션 확인 중 🤝','허브 정리 중 📌','일정 맞추는 중 🗓️'],
   buyi:['클레이 렌더 중 🎨','메일 정리 중 📮','카드 만드는 중 🖼️','별냥이 배너 🐾'],
   keyring:['스톡 정리 중 🔑','PNG 누끼 중 ✂️','보관소 정리 📦'],
-  muse:['일러스트 중 ✨','톤 맞추는 중 🖌️','2048px 작업 중 🎨'],
+  muse:['카드뉴스 만드는 중 📰','운세 분석 중 📈','카드뉴스 검수 중 🔍'],
   _meet:['회의 중 🗣️','발언 중 💬','같이 듣는 중 👂','메모 중 📝']
 };
 var CH={},OWN={};
@@ -1156,15 +1156,19 @@ var BRAIN={
     return pick(['네~ 제가 맡을게요!','오케이, 바로 준비할게요 🎨','확인했어요 대장님!','이번엔 첫 검수에서 다 걸러낼게요!']);
   },
   muse:function(t){
-    if(has(t,'해상도','2048','고화질','일러스트','그림','뽑','톤','무드'))return pick([
-      '2048px로 뽑아둘게요. 톤만 정해주시면 바로 시작할게요!',
-      '클래식보다 모던한 무드로 갈게요. 얼굴은 원본 그대로 유지할게요.',
-      '배경은 크림 톤으로 깔고 그림자만 잡을까요?']);
+    if(has(t,'카드뉴스','cardnews','피드','게시','소재'))return pick([
+      '카드뉴스 4장 1080×1350으로 뽑아둘게요. 오늘 소재만 정해주세요!',
+      '제목 크게, 본문은 세 줄로 끊어서 만들게요 📰',
+      'cardnews_4860 게시 슬롯에 맞춰 올려둘게요.']);
+    if(has(t,'운세','성장','분석','팔로워','조회','지표','댓글'))return pick([
+      '별냥이·호시냥 팔로워랑 조회수 이번 주 기준으로 비교해뒀어요 📈',
+      '지난주 대비 성장 폭 보고 다음 주 콘텐츠 방향을 잡죠!',
+      '분석은 일주일 단위가 잘 보여요. 다음 건 다음 주에 정리할게요.']);
     if(has(t,'ai티','AI티','티나','독특','독창','차별'))return pick([
       'AI티 안 나게 디테일 잡을게요. 남들과 다른 느낌으로!',
-      '손이랑 그림자, 안쪽 경계 위주로 다듬어볼게요.']);
-    if(has(t,'고마','수고','최고','예뻐'))return pick(['칭찬 감사해요. 다음 컷도 기대해주세요 🖌️','뿌듯하네요!']);
-    return pick(['음, 그건 제 쪽에서 해볼게요.','레퍼런스 주시면 바로 시작할게요 🖌️','좋아요. 색감은 따뜻하게 갈까요?','확인! 결과물 한 번에 통과되게 할게요.']);
+      '템플릿 말고 직접 그린 컷으로 갈게요.']);
+    if(has(t,'고마','수고','최고','예뻐'))return pick(['칭찬 감사해요. 다음 카드뉴스도 기대해주세요 📰','뿌듯하네요!']);
+    return pick(['음, 그건 제 쪽에서 해볼게요.','소재만 주시면 카드뉴스 바로 만들게요 📰','좋아요. 문구 톤은 담백하게 갈까요?','확인! 한 번에 통과되게 할게요.']);
   },
   keyring:function(t){
     if(has(t,'노션','스톡','키링','아이콘','보관소','png','PNG','누끼'))return pick([
