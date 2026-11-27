@@ -354,6 +354,9 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
 .stage .chr.workpose .shaw{opacity:0}
 .stage .chr.workpose .nm{font-size:calc(var(--nfs) * .94)}
 .stage .chr.workpose .amb{left:calc(50% + var(--ambx,0%));bottom:calc(80% + 2px);background:#FFF9EE;border-color:rgba(138,90,50,.3)}
+@media (min-width:561px) and (max-width:760px){
+  .stage .chr.workpose .amb{font-size:calc(var(--nfs) * .8);padding:.08em .38em .12em}
+}
 @media (max-width:560px){
   .stage .chr.workpose .nm b{display:none}
   .stage .chr.workpose .nm{font-size:calc(var(--nfs) * .78)}
