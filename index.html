@@ -676,7 +676,7 @@ var NODES={
   w7:{x:64.6,y:57,r:'work'}, w8:{x:68.6,y:50.6,r:'work'}, w9:{x:74,y:47.6,r:'work'},
   w10:{x:80,y:47.4,r:'work'}, w11:{x:85.6,y:49.4,r:'work'},
   /* 라운지 */
-  pl:{x:47.5,y:80.5,r:'lounge'}, L3:{x:48.5,y:83.4,r:'lounge'}, L2:{x:47.5,y:88,r:'lounge'},
+  pl:{x:50,y:80.6,r:'lounge'}, L3:{x:49.6,y:83.8,r:'lounge'}, L2:{x:48.4,y:88,r:'lounge'},
   L1:{x:57,y:91,r:'lounge'}, Lb:{x:65.5,y:93.4,r:'lounge'},
   /* 회의실 */
   m0:{x:41,y:55.5,r:'meet'}, m1:{x:37.5,y:60,r:'meet'}, m2:{x:35.6,y:64.6,r:'meet'},
@@ -797,10 +797,24 @@ function claim(c,id){
   if(c.node&&OWN[c.node]===c.id)delete OWN[c.node];
   if(!owned(id,c.id))OWN[id]=c.id;
 }
+function gapTo(id,c){
+  var n=NODES[id],min=99;
+  Object.keys(CH).forEach(function(k){
+    if(k===c.id)return;
+    var o=CH[k],d=Math.sqrt((o.x-n.x)*(o.x-n.x)+(o.y-n.y)*(o.y-n.y));
+    if(d<min)min=d;
+  });
+  return min;
+}
 function pickDest(c){
-  var pool=(Math.random()<0.58?c.zone:ALLNODES).filter(function(id){return id!==c.node&&!owned(id,c.id)});
-  if(!pool.length)pool=ALLNODES.filter(function(id){return id!==c.node});
-  var id=pool[Math.floor(Math.random()*pool.length)]||c.home;
+  var base=(Math.random()<0.58?c.zone:ALLNODES).filter(function(id){return id!==c.node});
+  var pool=base.filter(function(id){return !owned(id,c.id)&&gapTo(id,c)>=9});
+  if(!pool.length)pool=base.filter(function(id){return !owned(id,c.id)&&gapTo(id,c)>=6});
+  if(!pool.length)pool=base.filter(function(id){return !owned(id,c.id)});
+  if(!pool.length)pool=base;
+  var far=pool.filter(function(id){return gapTo(id,c)>=9});
+  var use=(far.length&&Math.random()<0.75)?far:pool;
+  var id=use[Math.floor(Math.random()*use.length)]||c.home;
   goTo(c,id);
 }
 
