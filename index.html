@@ -823,13 +823,13 @@ function callMeeting(){
   meeting=true;
   clearTimeout(meetTimer);
   $('#btnMeet').classList.add('on'); $('#btnRoam').classList.remove('on');
-  $('#walkStat').textContent='📢 회의 소집 — 다섯 명이 대회의실로 모이는 중…';
+  $('#walkStat').textContent='📢 회의 중 — 다섯 명이 대회의실에 모였어요 (자유 산책을 누르면 해산)';
   Object.keys(CH).forEach(function(k,i){
     var c=CH[k]; c.mode='meet';
     setTimeout(function(){goTo(c,c.seat,true)},i*220);
   });
   toast('📢 회의 소집! 다들 회의실로 모여요');
-  meetTimer=setTimeout(freeRoam,26000);
+  meetTimer=setTimeout(freeRoam,90000);
 }
 function freeRoam(){
   meeting=false;
