@@ -338,7 +338,7 @@ async function handlePost(body) {
 
 module.exports = async (req, res) => {
   const origin = req.headers.origin || "";
-  const headers = { "Content-Type": "application/json; charset=utf-8", ...corsHeaders(origin) };
+  const headers = { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "private, no-store, max-age=0", "Vary": "X-Office-Key", ...corsHeaders(origin) };
   const send = (code, obj) => {
     res.writeHead(code, headers);
     res.end(JSON.stringify(obj));
@@ -357,10 +357,7 @@ module.exports = async (req, res) => {
   try {
     if (req.method === "GET") {
       const data = await buildHub();
-      res.writeHead(200, {
-        ...headers,
-        "Cache-Control": "public, max-age=0, s-maxage=20, stale-while-revalidate=40"
-      });
+      res.writeHead(200, headers);
       return res.end(JSON.stringify(data));
     }
 
