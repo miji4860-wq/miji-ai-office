@@ -415,9 +415,46 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
 .hubmeet .hm-op .op.pend{background:#FBF5EC}
 .hubmeet .hm-op .op.pend p{color:#8A7561;font-style:italic}
 .hubmeet .hm-link{display:inline-block;margin-top:9px;font-size:10.5px;font-weight:800;color:#8A5A32;text-decoration:underline}
+
+/* ===== 접속 잠금 (2026-11-28 초연) ===== */
+body.locked{overflow:hidden}
+body.locked .topbar,body.locked main{visibility:hidden}
+.lockscreen{position:fixed;inset:0;z-index:9990;display:none;place-items:center;padding:24px;
+  background:radial-gradient(900px 480px at 8% -8%,#FFF3DF 0%,rgba(255,243,223,0) 62%),radial-gradient(760px 420px at 100% 0%,#FBEBDA 0%,rgba(251,235,218,0) 58%),linear-gradient(180deg,#FEF9F1 0%,#FBF2E5 100%)}
+body.locked .lockscreen{display:grid}
+.lockcard{width:min(340px,100%);background:#FFFDF9;border:1px solid var(--line2);border-radius:24px;padding:26px 22px 20px;text-align:center;box-shadow:0 20px 44px -26px rgba(97,57,28,.75)}
+.lockcard .lk-crown{width:56px;height:56px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:26px;
+  background:linear-gradient(150deg,#FFF6E4,#F6DFBC);border:1.5px solid rgba(138,90,50,.22);box-shadow:inset 0 2px 6px #fff,0 8px 18px -12px rgba(138,90,50,.8)}
+.lockcard h2{margin:0;font-size:17.5px;font-weight:800;letter-spacing:-.03em;color:#3D2817}
+.lockcard .lk-sub{margin:5px 0 16px;font-size:11.5px;font-weight:700;color:#8A7561}
+.lk-form{display:grid;gap:8px}
+.lk-form input{width:100%;padding:13px 14px;border-radius:14px;border:1.5px solid var(--line2);background:#FFFBF4;font-size:16px;font-weight:800;letter-spacing:.14em;text-align:center;color:#3D2817;outline:none}
+.lk-form input::placeholder{letter-spacing:0;font-weight:700;color:#B0977F}
+.lk-form input:focus{border-color:rgba(138,90,50,.55);box-shadow:0 0 0 3px rgba(201,144,85,.16);background:#FFFDF9}
+.lk-form button{padding:12px 14px;border-radius:14px;font-size:13px;font-weight:800;color:#FFF9F0;
+  background:linear-gradient(150deg,#96633A,#74441F);box-shadow:0 12px 22px -16px rgba(97,57,28,1)}
+.lk-form button:disabled{opacity:.6}
+.lk-err{min-height:16px;margin:9px 0 0;font-size:11.5px;font-weight:700;color:#B4453C}
+.locknow{margin-left:8px;width:32px;height:32px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;font-size:14px;
+  background:#FFF6E8;border:1px solid rgba(138,90,50,.22);color:#6B4423;box-shadow:0 4px 10px -8px rgba(97,57,28,.9)}
+.locknow:hover{background:#F7EBD8}
+@media (max-width:430px){.locknow{width:30px;height:30px;margin-left:6px}.lockcard{padding:22px 18px 18px}}
 </style>
 </head>
-<body>
+<body class="locked">
+
+<div class="lockscreen" id="lockScreen">
+  <div class="lockcard">
+    <div class="lk-crown">👑</div>
+    <h2>미지 님 비서실</h2>
+    <p class="lk-sub">비밀번호를 입력하면 열려요</p>
+    <form class="lk-form" id="lockForm" autocomplete="off">
+      <input id="lockInput" type="password" inputmode="numeric" autocomplete="off" placeholder="비밀번호" maxlength="24" aria-label="비밀번호">
+      <button id="lockBtn" type="submit">확인</button>
+    </form>
+    <p class="lk-err" id="lockErr"></p>
+  </div>
+</div>
 
 <div class="topbar">
   <div class="head">
@@ -427,6 +464,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
       <div class="h-sub"><i></i>미지 님 전용</div>
     </div>
     <div class="live"><i></i>실시간 연결</div>
+    <button class="locknow" id="lockNow" aria-label="잠금" title="잠금">🔒</button>
   </div>
   <nav class="tabs" id="tabs">
     <button class="tab on" data-tab="map"><span class="e">🗺️</span>오피스 맵</button>
@@ -1103,7 +1141,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeBubble
 
 /* ================= NOTION HUB (실시간 양방향) ================= */
 var HUB_API='https://miji-ai-office-api.vercel.app';
-var HUB_KEY='i_7k31shPBDMOyb-t_tcufob';
+/* 접속 키는 이 기기의 localStorage에만 보관합니다 (코드에 넣지 않음) */
+var LOCK_KEY='mijiOffice.key.v3';
+function officeKey(){try{return localStorage.getItem(LOCK_KEY)||''}catch(e){return ''}}
+function setOfficeKey(k){try{if(k)localStorage.setItem(LOCK_KEY,k);else localStorage.removeItem(LOCK_KEY)}catch(e){}}
 var HUB_URL='https://app.notion.com/p/425887322916814c82ddcce3cc72ffb0';
 var NAME2ID={'초연':'choyeon','담연':'damyeon','부이':'buyi','키링':'keyring','뮤즈':'muse'};
 var ID2NM={choyeon:'초연',damyeon:'담연',buyi:'부이',keyring:'키링',muse:'뮤즈'};
@@ -1111,13 +1152,19 @@ var HUB={data:null,at:0,busy:false,ok:false};
 var autoOn=false,hubTimer=null;
 
 function hubGet(cb){
+  var key=officeKey();
+  if(!key){if(cb)cb('locked');return}
   if(HUB.busy)return;
   HUB.busy=true;
   var ctl=window.AbortController?new AbortController():null;
   var to=setTimeout(function(){if(ctl)ctl.abort()},12000);
-  fetch(HUB_API+'/api/hub?k='+encodeURIComponent(HUB_KEY),{cache:'no-store',signal:ctl?ctl.signal:undefined})
-    .then(function(r){return r.json()})
+  fetch(HUB_API+'/api/hub?k='+encodeURIComponent(key),{cache:'no-store',headers:{'X-Office-Key':key},signal:ctl?ctl.signal:undefined})
+    .then(function(r){
+      if(r.status===401){clearTimeout(to);HUB.busy=false;HUB.ok=false;hubLive(false);lockOut('잠금이 풀렸어요. 비밀번호를 다시 입력해 주세요.');if(cb)cb('unauthorized');return null}
+      return r.json();
+    })
     .then(function(d){
+      if(!d)return;
       clearTimeout(to);HUB.busy=false;
       if(d&&d.ok){HUB.data=d;HUB.at=Date.now();HUB.ok=true;renderHub();if(autoOn)applyStatuses();if(cb)cb(null,d)}
       else{HUB.ok=false;hubLive(false);if(cb)cb((d&&d.error)||'error')}
@@ -1125,12 +1172,64 @@ function hubGet(cb){
     .catch(function(e){clearTimeout(to);HUB.busy=false;HUB.ok=false;hubLive(false);if(cb)cb(e)});
 }
 function hubPost(action,text,title,cb){
-  fetch(HUB_API+'/api/hub',{method:'POST',headers:{'Content-Type':'application/json','X-Office-Key':HUB_KEY},
+  var key=officeKey();
+  if(!key){if(cb)cb('locked');return}
+  fetch(HUB_API+'/api/hub',{method:'POST',headers:{'Content-Type':'application/json','X-Office-Key':key},
     body:JSON.stringify({action:action,text:text,title:title})})
     .then(function(r){return r.json()})
     .then(function(d){if(cb)cb(d&&d.ok?null:((d&&d.error)||'error'),d)})
     .catch(function(e){if(cb)cb(e)});
 }
+/* ---------- 접속 잠금 ---------- */
+var lockBusy=false;
+function lockMsg(msg){var e=document.getElementById('lockErr');if(e)e.textContent=msg||''}
+function lockOn(msg){
+  document.body.classList.add('locked');
+  var b=document.getElementById('lockNow');if(b)b.hidden=true;
+  var i=document.getElementById('lockInput');
+  if(i){i.value='';setTimeout(function(){try{i.focus()}catch(e){}},80)}
+  lockMsg(msg||'');
+}
+function lockOut(msg){setOfficeKey('');HUB.data=null;HUB.ok=false;lockOn(msg||'')}
+function unlockApp(){
+  document.body.classList.remove('locked');
+  var b=document.getElementById('lockNow');if(b)b.hidden=false;
+  lockMsg('');
+  var i=document.getElementById('lockInput');if(i)i.value='';
+  HUB.ok=false;HUB.busy=false;
+  hubGet();
+}
+function verifyKey(key,cb){
+  var ctl=window.AbortController?new AbortController():null;
+  var to=setTimeout(function(){if(ctl)ctl.abort()},12000);
+  fetch(HUB_API+'/api/hub?k='+encodeURIComponent(key),{cache:'no-store',headers:{'X-Office-Key':key},signal:ctl?ctl.signal:undefined})
+    .then(function(r){clearTimeout(to);cb(r.status===200?'ok':(r.status===401?'bad':'err'))})
+    .catch(function(){clearTimeout(to);cb('net')});
+}
+function lockSubmit(){
+  if(lockBusy)return;
+  var inp=document.getElementById('lockInput');
+  var v=((inp&&inp.value)||'').trim();
+  if(!v){lockMsg('비밀번호를 입력해 주세요');return}
+  lockBusy=true;
+  var btn=document.getElementById('lockBtn');
+  if(btn){btn.disabled=true;btn.textContent='확인 중…'}
+  lockMsg('');
+  verifyKey(v,function(res){
+    lockBusy=false;
+    if(btn){btn.disabled=false;btn.textContent='확인'}
+    if(res==='ok'){setOfficeKey(v);unlockApp();if(typeof toast==='function')toast('잠금을 풀었어요 🔓');}
+    else if(res==='bad'){lockMsg('비밀번호가 맞지 않아요');if(inp){try{inp.select()}catch(e){}}}
+    else{lockMsg('연결이 안 돼요. 잠시 뒤 다시 시도해 주세요')}
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var f=document.getElementById('lockForm');
+  if(f)f.addEventListener('submit',function(e){e.preventDefault();lockSubmit()});
+  var b=document.getElementById('lockNow');
+  if(b)b.addEventListener('click',function(){lockOut('');if(typeof toast==='function')toast('잠갔어요 🔒')});
+});
+
 function hubLive(on){
   var el=document.getElementById('hubLive');
   if(!el)return;
@@ -1543,6 +1642,12 @@ $('#memoSearch').addEventListener('input',function(){
   q=this.value.trim().toLowerCase();renderMemos();
 });
 renderMemos();
+
+/* 접속 잠금 상태로 시작 (키가 저장돼 있으면 바로 열기) */
+(function lockStart(){
+  if(officeKey()){unlockApp();}
+  else{lockOn('');}
+})();
 
 })();
 </script>
