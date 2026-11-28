@@ -12,7 +12,7 @@
 *,*::before,*::after{box-sizing:border-box}
 :root{
   --cream:#FDF7EF; --cream2:#F8EEE0; --card:#FFFDF9;
-  --ink:#46301F; --ink2:#6E5540; --muted:#A08A75;
+  --ink:#46301F; --ink2:#6E5540; --muted:#8C735C;
   --brown:#8A5A32; --brownD:#61391C; --caramel:#C99055;
   --line:rgba(138,90,50,.14); --line2:rgba(138,90,50,.22);
   --green:#2E9E63; --shadow:0 14px 34px -18px rgba(97,57,28,.45);
@@ -175,7 +175,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
 .bub{background:#fff;border:1px solid var(--line);border-radius:14px;border-bottom-left-radius:5px;padding:8px 11px;
   font-size:12.8px;line-height:1.55;color:var(--ink);box-shadow:0 4px 12px -10px rgba(97,57,28,.8);word-break:break-word;white-space:pre-wrap}
 .msg.me .bub{background:linear-gradient(150deg,#9A6538,#74441F);color:#FFF9F1;border:none;border-radius:14px;border-bottom-right-radius:5px}
-.mt{font-size:9.5px;color:#BBA593;padding:0 3px}
+.mt{font-size:9.5px;color:#A58C74;padding:0 3px}
 .typing{display:inline-flex;gap:3px;padding:3px 1px}
 .typing i{width:5px;height:5px;border-radius:50%;background:#C3A98F;animation:bounce 1.1s infinite}
 .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
@@ -195,7 +195,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
 .inrow input{flex:1;min-width:0;padding:11px 13px;border-radius:13px;background:#F9F1E5;border:1px solid var(--line);
   font-size:13px;outline:none;transition:.15s}
 .inrow input:focus{border-color:rgba(138,90,50,.4);background:#FFFDF9;box-shadow:0 0 0 3px rgba(201,144,85,.15)}
-.inrow input::placeholder{color:#BBA593}
+.inrow input::placeholder{color:#A58C74}
 .send{width:44px;height:44px;flex:0 0 auto;border-radius:13px;display:grid;place-items:center;font-size:16px;
   background:linear-gradient(150deg,#96633A,#74441F);color:#fff;box-shadow:0 10px 20px -12px rgba(97,57,28,1)}
 .send:active{transform:scale(.96)}
@@ -239,7 +239,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
 .memotop input:focus{border-color:rgba(138,90,50,.45)}
 .memoform{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:11px;box-shadow:0 10px 24px -24px rgba(97,57,28,1)}
 .memoform textarea{width:100%;border:none;background:transparent;resize:none;min-height:76px;font-size:13px;line-height:1.6;outline:none;padding:4px 3px}
-.memoform textarea::placeholder{color:#BBA593}
+.memoform textarea::placeholder{color:#A58C74}
 .mf{display:flex;align-items:center;gap:8px;margin-top:6px}
 .mf .cnt{font-size:10.5px;color:var(--muted);font-weight:700}
 .mf .btn{margin-left:auto}
@@ -248,7 +248,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
   box-shadow:0 8px 20px -22px rgba(97,57,28,1)}
 .memo .mk{position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(#E3BE86,#C99055)}
 .memo p{font-size:12.8px;line-height:1.62;white-space:pre-wrap;word-break:break-word;padding-left:5px}
-.memo .md{font-size:10px;color:#BBA593;font-weight:700;margin-top:6px;padding-left:5px}
+.memo .md{font-size:10px;color:#A58C74;font-weight:700;margin-top:6px;padding-left:5px}
 .memo .x{position:absolute;right:7px;top:7px;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#C4AE99;font-size:14px}
 .memo .x:hover{background:#FBEDE1;color:#B4703F}
 .empty{text-align:center;padding:34px 16px;color:var(--muted);font-size:12.5px;line-height:1.7}
@@ -377,7 +377,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
   font-size:11.5px;font-weight:800;color:var(--ink2);line-height:1.25;text-decoration:none;box-shadow:0 6px 16px -16px rgba(97,57,28,.9);transition:.15s}
 .hubgrid a:hover{background:#FFF9EE;border-color:var(--line2);transform:translateY(-1px)}
 .hubgrid a span.i{font-size:14px;line-height:1}
-.hubgrid a small{display:block;font-size:9.5px;font-weight:700;color:var(--muted);margin-top:1px}
+.hubgrid a small{display:block;font-size:9.5px;font-weight:700;color:#8C735C;margin-top:1px}
 @media (max-width:400px){.hubgrid{grid-template-columns:1fr 1fr}.hubgrid a{font-size:10.5px;padding:8px 9px}}
 #chrLayer{position:absolute;inset:0;z-index:40;pointer-events:none}
 .stage .chr .box{pointer-events:auto}
