@@ -173,9 +173,11 @@ function parseMeeting(allSecs) {
       requests.push({ text: t, id: b.id });
     }
   }
-  // keep only the newest opinion per author
+  // keep only the newest opinion per author, for the five assistants
   const latest = {};
-  for (const o of opinions) latest[o.author] = o;
+  for (const o of opinions) {
+    if (MEMBERS.includes(o.author)) latest[o.author] = o;
+  }
   return {
     title,
     requests,
