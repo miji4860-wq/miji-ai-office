@@ -443,7 +443,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
       <h2><em>미지 님</em>, 비서 5명이 아장아장 걷고 있어요</h2>
       <p>움직이는 비서를 눌러 인사해 보세요. 방 배지로 방 안내를 볼 수 있어요.</p>
       <div class="chips">
-        <span class="chip"><i class="dot-g"></i><b>5명</b> 산책 중</span>
+        <span class="chip"><i class="dot-g"></i><b>5명</b> <span id="chipWalk">산책 중</span></span>
         <span class="chip">👥 <b>ON</b> 5명 + 여우별</span>
         <span class="chip">🐱 여우별 낮잠 중</span>
         <span class="chip">🤝 담연 <b id="chipDamyeon">가동 중</b></span>
@@ -1148,20 +1148,23 @@ function statusClass(st){
 }
 function applyStatuses(){
   if(!HUB.data||!HUB.data.members)return;
+  var moved=0;
   HUB.data.members.forEach(function(m){
     var id=NAME2ID[m.name];if(!id||!CH[id])return;
     var c=CH[id],want=modeOf(m.status);
     if(c.mode===want)return;
-    c.mode=want;c.tok++;standUp(c);
+    c.mode=want;c.tok++;standUp(c);moved++;
     var target=want==='meet'?c.seat:(want==='work'?c.wseat:c.home);
     var tk=c.tok;
     setTimeout(function(){if(c.tok===tk)goTo(c,target,true)},Math.random()*500);
   });
-  toast('🔄 노션 상태로 자리를 다시 잡았어요');
+  if(moved)toast('🔄 노션 상태가 바뀌어 '+moved+'명이 자리를 옮겼어요');
 }
 function renderHub(){
   var d=HUB.data;if(!d)return;
   hubLive(true);
+  var cw=document.getElementById('chipWalk');
+  if(cw)cw.textContent=autoOn?'노션 상태 반영 중':'산책 중';
   /* 지도 상태 칩 */
   var stat=document.getElementById('hubStat');
   if(stat&&d.members){
@@ -1203,6 +1206,7 @@ function renderHub(){
 }
 function callAuto(){
   autoOn=true;meeting=false;working=false;clearTimeout(meetTimer);
+  var cw0=document.getElementById('chipWalk'); if(cw0)cw0.textContent='노션 상태 반영 중';
   document.getElementById('btnAuto').classList.add('on');
   document.getElementById('btnMeet').classList.remove('on');
   document.getElementById('btnWork').classList.remove('on');
