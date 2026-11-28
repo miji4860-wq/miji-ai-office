@@ -389,6 +389,31 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
 
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
 </style>
+
+<style>
+/* ===== 노션 실시간 연동 (2026-11-28 초연) ===== */
+.hubstat{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.hubstat span{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);color:var(--muted)}
+.hubstat span b{color:#fff;font-weight:800;margin-right:4px}
+.hubstat span.on{background:rgba(120,220,160,.16);border-color:rgba(120,220,160,.4);color:#cdeadb}
+.hubstat span.rest{background:rgba(255,255,255,.05)}
+.hubstat span.mt{background:rgba(150,180,255,.16);border-color:rgba(150,180,255,.4);color:#d3ddff}
+#btnAuto.on{background:linear-gradient(180deg,#6fd6a0,#3aa974);color:#08210f;border-color:#8ee9bb}
+.hubmeet{margin:0 0 12px;border-radius:16px;padding:12px 13px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.12)}
+.hubmeet .hm-h{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#fff}
+.hubmeet .hm-live{margin-left:auto;font-size:10px;font-weight:800;letter-spacing:.3px;color:#8ee9bb}
+.hubmeet .hm-live.off{color:#e79a9a}
+.hubmeet .hm-rf{margin-left:6px;width:24px;height:24px;border-radius:8px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;font-size:13px;line-height:1;cursor:pointer}
+.hubmeet .hm-title{margin:7px 0 8px;font-size:12.5px;font-weight:800;line-height:1.45;color:#fff}
+.hubmeet ul.hm-req{margin:0 0 9px;padding-left:15px;display:grid;gap:3px}
+.hubmeet ul.hm-req li{font-size:11px;line-height:1.5;color:var(--muted)}
+.hubmeet .hm-op{display:grid;gap:6px}
+.hubmeet .hm-op .op{border-radius:11px;padding:7px 9px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.07)}
+.hubmeet .hm-op .op b{display:block;font-size:10.5px;margin-bottom:2px}
+.hubmeet .hm-op .op p{font-size:11px;line-height:1.5;color:#e7e4dd;margin:0;max-height:80px;overflow:hidden}
+.hubmeet .hm-op .op.pend p{color:var(--muted);font-style:italic}
+.hubmeet .hm-link{display:inline-block;margin-top:9px;font-size:10.5px;font-weight:800;color:#9cc2ff;text-decoration:none}
+</style>
 </head>
 <body>
 
@@ -421,8 +446,9 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
         <span class="chip"><i class="dot-g"></i><b>5명</b> 산책 중</span>
         <span class="chip">👥 <b>ON</b> 5명 + 여우별</span>
         <span class="chip">🐱 여우별 낮잠 중</span>
-        <span class="chip">🤝 담연 <b>가동 중</b></span>
+        <span class="chip">🤝 담연 <b id="chipDamyeon">가동 중</b></span>
       </div>
+      <div class="hubstat" id="hubStat"></div>
     </div>
 
     <div class="mapwrap">
@@ -443,6 +469,7 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
         <button class="wbtn" id="btnMeet">📢 회의 소집</button>
         <button class="wbtn" id="btnWork">💻 일하기</button>
         <button class="wbtn on" id="btnRoam">🐾 자유 산책</button>
+        <button class="wbtn" id="btnAuto">🔄 실시간 자동</button>
         <div class="wstat" id="walkStat"></div>
       </div>
       <div class="mapnote">👆 걷는 비서를 누르면 인사, 방 배지는 방 안내</div>
@@ -494,6 +521,14 @@ main{max-width:1080px;margin:0 auto;padding:16px 16px calc(34px + env(safe-area-
       <button class="on" data-room="main">대회의실</button>
       <button data-room="cmd">지휘실</button>
       <button data-room="lounge">라운지</button>
+    </div>
+
+    <div class="hubmeet" id="hubMeet">
+      <div class="hm-h"><span>📣 노션 회의 안건</span><span class="hm-live" id="hubLive">● 실시간</span><button class="hm-rf" id="hubRefresh" aria-label="노션에서 새로 불러오기">↻</button></div>
+      <div class="hm-title" id="hubTitle">노션 공용 허브에서 불러오는 중…</div>
+      <ul class="hm-req" id="hubReq"></ul>
+      <div class="hm-op" id="hubOps"></div>
+      <a class="hm-link" id="hubLink" href="https://app.notion.com/p/425887322916814c82ddcce3cc72ffb0" target="_blank" rel="noopener">노션 허브에서 전체 보기 ↗</a>
     </div>
 
     <div class="chatcard">
@@ -904,6 +939,7 @@ function pickDest(c){
 
 var meeting=false,meetTimer=null,working=false;
 function callMeeting(){
+  autoOn=false; var ba=document.getElementById('btnAuto'); if(ba)ba.classList.remove('on');
   meeting=true; working=false;
   clearTimeout(meetTimer);
   $('#btnMeet').classList.add('on'); $('#btnWork').classList.remove('on'); $('#btnRoam').classList.remove('on');
@@ -918,6 +954,7 @@ function callMeeting(){
 }
 /* 💻 일하기 — 다섯 명이 각자 책상 의자로 */
 function callWork(){
+  autoOn=false; var ba2=document.getElementById('btnAuto'); if(ba2)ba2.classList.remove('on');
   working=true; meeting=false;
   clearTimeout(meetTimer);
   $('#btnWork').classList.add('on'); $('#btnMeet').classList.remove('on'); $('#btnRoam').classList.remove('on');
@@ -930,6 +967,7 @@ function callWork(){
   toast('💻 일하기 — 각자 책상으로 출근!');
 }
 function freeRoam(){
+  autoOn=false; var ba3=document.getElementById('btnAuto'); if(ba3)ba3.classList.remove('on');
   meeting=false; working=false;
   clearTimeout(meetTimer);
   $('#btnMeet').classList.remove('on'); $('#btnWork').classList.remove('on'); $('#btnRoam').classList.add('on');
@@ -943,6 +981,9 @@ function freeRoam(){
 $('#btnMeet').addEventListener('click',callMeeting);
 $('#btnWork').addEventListener('click',callWork);
 $('#btnRoam').addEventListener('click',freeRoam);
+$('#btnAuto').addEventListener('click',callAuto);
+var hubRf=document.getElementById('hubRefresh');
+if(hubRf)hubRf.addEventListener('click',hubRefreshNow);
 $('#walkStat').textContent='🐾 자유 산책 중 — 다섯 명이 사무실을 아장아장 걷고 있어요';
 /* 좁은 화면에서는 일하는 말풍선을 한 명씩 번갈아 보여줘 서로 가리지 않게 */
 setInterval(function(){
@@ -1057,10 +1098,129 @@ stage.addEventListener('click',function(){closeBubble()});
 window.addEventListener('load',function(){boot()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeBubble();hideRoom()}});
 
+
+/* ================= NOTION HUB (실시간 양방향) ================= */
+var HUB_API='https://miji-ai-office-api.vercel.app';
+var HUB_KEY='i_7k31shPBDMOyb-t_tcufob';
+var HUB_URL='https://app.notion.com/p/425887322916814c82ddcce3cc72ffb0';
+var NAME2ID={'초연':'choyeon','담연':'damyeon','부이':'buyi','키링':'keyring','뮤즈':'muse'};
+var ID2NM={choyeon:'초연',damyeon:'담연',buyi:'부이',keyring:'키링',muse:'뮤즈'};
+var HUB={data:null,at:0,busy:false,ok:false};
+var autoOn=false,hubTimer=null;
+
+function hubGet(cb){
+  if(HUB.busy)return;
+  HUB.busy=true;
+  var ctl=window.AbortController?new AbortController():null;
+  var to=setTimeout(function(){if(ctl)ctl.abort()},12000);
+  fetch(HUB_API+'/api/hub?k='+encodeURIComponent(HUB_KEY),{cache:'no-store',signal:ctl?ctl.signal:undefined})
+    .then(function(r){return r.json()})
+    .then(function(d){
+      clearTimeout(to);HUB.busy=false;
+      if(d&&d.ok){HUB.data=d;HUB.at=Date.now();HUB.ok=true;renderHub();if(autoOn)applyStatuses();if(cb)cb(null,d)}
+      else{HUB.ok=false;hubLive(false);if(cb)cb((d&&d.error)||'error')}
+    })
+    .catch(function(e){clearTimeout(to);HUB.busy=false;HUB.ok=false;hubLive(false);if(cb)cb(e)});
+}
+function hubPost(action,text,title,cb){
+  fetch(HUB_API+'/api/hub',{method:'POST',headers:{'Content-Type':'application/json','X-Office-Key':HUB_KEY},
+    body:JSON.stringify({action:action,text:text,title:title})})
+    .then(function(r){return r.json()})
+    .then(function(d){if(cb)cb(d&&d.ok?null:((d&&d.error)||'error'),d)})
+    .catch(function(e){if(cb)cb(e)});
+}
+function hubLive(on){
+  var el=document.getElementById('hubLive');
+  if(!el)return;
+  el.className='hm-live'+(on?'':' off');
+  el.textContent=on?'● 실시간':'● 연결 끊김';
+}
+function modeOf(st){
+  var t=String(st||'');
+  if(/회의/.test(t))return 'meet';
+  if(/가동|일하|작업|근무|업무|진행/.test(t))return 'work';
+  if(/대기|휴식|쉬|오프|비움/.test(t))return 'roam';
+  return 'roam';
+}
+function statusClass(st){
+  var m=modeOf(st);
+  return m==='work'?'on':(m==='meet'?'mt':'rest');
+}
+function applyStatuses(){
+  if(!HUB.data||!HUB.data.members)return;
+  HUB.data.members.forEach(function(m){
+    var id=NAME2ID[m.name];if(!id||!CH[id])return;
+    var c=CH[id],want=modeOf(m.status);
+    if(c.mode===want)return;
+    c.mode=want;c.tok++;standUp(c);
+    var target=want==='meet'?c.seat:(want==='work'?c.wseat:c.home);
+    var tk=c.tok;
+    setTimeout(function(){if(c.tok===tk)goTo(c,target,true)},Math.random()*500);
+  });
+  toast('🔄 노션 상태로 자리를 다시 잡았어요');
+}
+function renderHub(){
+  var d=HUB.data;if(!d)return;
+  hubLive(true);
+  /* 지도 상태 칩 */
+  var stat=document.getElementById('hubStat');
+  if(stat&&d.members){
+    stat.innerHTML=d.members.map(function(m){
+      return '<span class="'+statusClass(m.status)+'"><b>'+esc(m.label||m.name)+'</b>'+esc(m.status||'대기')+'</span>';
+    }).join('');
+    var dm=d.members.filter(function(m){return m.name==='담연'})[0];
+    var chip=document.getElementById('chipDamyeon');
+    if(chip&&dm)chip.textContent=dm.status||'대기';
+  }
+  /* 회의실 카드 */
+  var mt=d.meeting;
+  var tEl=document.getElementById('hubTitle');
+  if(tEl)tEl.textContent=mt&&mt.title?mt.title:'아직 올라온 회의 안건이 없어요';
+  var rEl=document.getElementById('hubReq');
+  if(rEl){
+    rEl.innerHTML=(mt&&mt.requests?mt.requests:[]).slice(0,4).map(function(r){
+      return '<li>'+esc(r.text)+'</li>';
+    }).join('');
+  }
+  var oEl=document.getElementById('hubOps');
+  if(oEl){
+    var by={};
+    (mt&&mt.opinions?mt.opinions:[]).forEach(function(o){by[o.author]=o});
+    var html='<div class="hm-op">';
+    ['초연','담연','부이','키링','뮤즈'].forEach(function(nm){
+      var o=by[nm],p=PEOPLE[NAME2ID[nm]]||{emoji:'🤖',color:'#8A5A32'};
+      html+='<div class="op'+(o?'':' pend')+'"><b style="color:'+(p.color||'#fff')+'">'+p.emoji+' '+esc(nm)+(o?' 의견':' · 의견 대기')+'</b>'+
+        '<p>'+esc(o?o.text:'아직 의견이 올라오지 않았어요.')+'</p></div>';
+    });
+    html+='</div>';
+    oEl.innerHTML=html;
+  }
+  var chat=document.getElementById('chatSub');
+  if(chat&&room==='main'&&d.members){
+    var on=d.members.filter(function(m){return modeOf(m.status)==='work'}).length;
+    chat.textContent='비서 '+d.members.length+'명 · 가동 중 '+on+'명 · 노션 동기화 '+now();
+  }
+}
+function callAuto(){
+  autoOn=true;meeting=false;working=false;clearTimeout(meetTimer);
+  document.getElementById('btnAuto').classList.add('on');
+  document.getElementById('btnMeet').classList.remove('on');
+  document.getElementById('btnWork').classList.remove('on');
+  document.getElementById('btnRoam').classList.remove('on');
+  document.getElementById('walkStat').textContent='🔄 실시간 자동 — 노션 상태를 따라가요 (가동 중 → 책상 · 대기 → 산책 · 회의 중 → 회의실)';
+  toast('🔄 노션 상태로 자동 배치 시작!');
+  if(!HUB.data){hubGet(function(){applyStatuses()})}else{applyStatuses()}
+}
+function hubRefreshNow(){
+  hubGet(function(err){
+    if(err){toast('⚠️ 노션 연결 실패 — 잠시 뒤 다시 시도할게요')}
+  });
+}
+
 /* ================= CHAT ================= */
 var ROOMINFO={
   main:{name:'대회의실',sub:'비서 5명 · 미지 님 대기 중',sys:'대회의실에 입장했어요. 담연도 합류해서 비서 5명이에요. 아래 @칩으로 말 걸 상대를 고르고 지시를 내려주세요.'},
-  cmd:{name:'지휘실',sub:'초연 상주 · 대장님 자리',sys:'지휘실이에요. 대장님 책상 앞, 초연이 대기 중이에요.'},
+  cmd:{name:'지휘실',sub:'초연 상주 · 지시는 노션에 자동 기록',sys:'지휘실이에요. 여기서 보낸 지시는 노션 공용 요청 보드에 바로 기록되고, 「안건:」으로 시작하면 회의 안건으로 올라가요.'},
   lounge:{name:'라운지',sub:'여우별 낮잠 중 · 편하게',sys:'라운지에 왔어요. 여우별이 소파에서 자고 있어요. 조용히 말 걸어볼까요? ☕'}
 };
 var room='main',target='choyeon',typingEl=null;
@@ -1228,6 +1388,19 @@ function send(){
   var q=$$('.quick',msgsEl);q.forEach(function(e){e.remove()});
   msgsEl.insertAdjacentHTML('beforeend',msgHTML(m));
   scrollBottom();
+  if(room==='cmd'){
+    var isAg=/^\s*안건\s*[:：]|^\s*회의\s*안건/.test(text), dg=isAg;
+    var body=dg?text.replace(/^\s*(회의\s*)?안건\s*[:：]?\s*/,'').trim():text;
+    toast(dg?'📣 노션 회의 안건으로 올리는 중…':'📥 노션 요청 보드에 기록하는 중…');
+    hubPost(dg?'agenda':'instruction',body,null,function(err){
+      var m2=err?{who:'choyeon',text:'⚠️ 노션 기록 실패: '+err+' — 잠시 뒤 다시 보내 주세요.',t:now()}
+               :{who:'choyeon',text:(dg?'📣 회의 안건을 노션 공용 허브에 올렸어요! 각 비서가 의견을 달 거예요.':'📥 지시를 노션 공용 요청 보드에 기록했어요! 담연이 확인합니다.'),t:now()};
+      pushMsg(room,m2);
+      msgsEl.insertAdjacentHTML('beforeend',msgHTML(m2));
+      scrollBottom();
+      if(!err)hubGet();
+    });
+  }
   var who=[];
   if(target==='all'){who=['choyeon','damyeon','buyi','muse','keyring']}else{who=[target]}
   who.forEach(function(id){queueReply(id,BRAIN[id](text))});
@@ -1254,6 +1427,19 @@ $$('#subtabs button').forEach(function(b){
   });
 });
 renderChat();
+
+/* 노션 허브 첫 동기화 + 60초 폴링 */
+hubGet();
+hubTimer=setInterval(function(){
+  if(document.hidden)return;
+  hubGet();
+},60000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)hubGet()});
+$$('.tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    if(t.dataset.tab==='meet'||t.dataset.tab==='map')hubGet();
+  });
+});
 
 /* briefing date */
 (function(){
